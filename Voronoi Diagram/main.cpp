@@ -158,7 +158,7 @@ int main(int argc, const char *argv[]) {
 
    build_voronoi(points, halfedges, vertices, faces);
     if(n<=1)
-     {std::cout<<"No voronoi diagram :-)\n";
+     {std::cout<<"No Diagram For 1 or Less Points\n";
        return 0;
      }
      else if(n==2)

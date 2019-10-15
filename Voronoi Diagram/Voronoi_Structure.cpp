@@ -6,7 +6,7 @@ Shivam Kumar Jha
 Voronoi DataStructure Class And Function Definitions File
 */
 
-#include "VoronoiDiagram.hpp"
+#include "Voronoi_Structure.hpp"
 #include <cmath>
 #include <queue>
 

@@ -16,8 +16,8 @@ Voronoi DataStructure Header File
 #include <random>
 #include <cassert>
 
-#ifndef VoronoiDiagram_hpp
-#define VoronoiDiagram_hpp
+#ifndef Voronoi_Structure_hpp
+#define Voronoi_Structure_hpp
 
 #define POINT_EPSILON 1.0e-6
 

@@ -3,11 +3,11 @@
 # 17CS30033
 # Makefile for easy compilation
 
-a.out: main.o VoronoiDiagram.o
-	g++ main.o VoronoiDiagram.o
-main.o: main.cpp VoronoiDiagram.o
+a.out: main.o Voronoi_Structure.o
+	g++ main.o Voronoi_Structure.o
+main.o: main.cpp Voronoi_Structure.o
 	g++ -c main.cpp
-VoronoiDiagram.o: VoronoiDiagram.cpp VoronoiDiagram.hpp
-	g++ -c 	VoronoiDiagram.cpp
+Voronoi_Structure.o: Voronoi_Structure.cpp Voronoi_Structure.hpp
+	g++ -c 	Voronoi_Structure.cpp
 clean:
-	rm a.out main.o VoronoiDiagram.o t4.svg
+	rm a.out main.o Voronoi_Structure.o t4.svg

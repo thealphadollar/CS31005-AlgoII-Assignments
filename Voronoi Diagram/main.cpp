@@ -14,7 +14,7 @@ Driver Function For Generating SVG File With Closest Circles
 #include <vector>
 #include <queue>
 #include <algorithm>
-#include "VoronoiDiagram.hpp"
+#include "Voronoi_Structure.hpp"
 
 #define MAX 500
 

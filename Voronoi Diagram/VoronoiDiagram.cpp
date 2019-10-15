@@ -187,7 +187,6 @@ Function definitions for Circle
 
 bool findCircleCenter(const Point2D &p1, const Point2D &p2, const Point2D &p3, Point2D &center) {
     
-    // get normalized vectors
     Point2D u1 = (p1 - p2).normalized(), u2 = (p3 - p2).normalized();
     
     double cross = crossProduct(u1, u2);
@@ -877,8 +876,7 @@ void build_voronoi(const std::vector<Point2D> &points,
     double sweepline = 0L; // current position of the sweepline
     
     // process events
-    while (!pq.empty()) {
-        
+    while (!pq.empty()) {    
         // extract new event from the queue
         EventPtr e = pq.top(); pq.pop();
         
@@ -1035,5 +1033,4 @@ void build_voronoi(const std::vector<Point2D> &points,
             faces[he->l_index] = he;
         }
     }
-    
 }

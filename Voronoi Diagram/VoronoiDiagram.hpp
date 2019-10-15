@@ -1,5 +1,5 @@
-#include<iostream>
-#include<memory>
+#include <iostream>
+#include <memory>
 #include <vector>
 #include <limits>
 #include <cmath>
@@ -8,13 +8,10 @@
 #include <random>
 #include <cassert>
 
-
 #ifndef VoronoiDiagram_hpp
 #define VoronoiDiagram_hpp
 
-
 #define POINT_EPSILON 1.0e-6
-
 
 /* =================================
 
@@ -94,15 +91,7 @@ Definition headers for Parabola
 
 ================================= */
 
-/*
- Calculate number of intersection points between two parabolas with foci `f1` and `f2` and with given `directrix`
- */
 int intersectionPointsNum(const Point2D &f1, const Point2D &f2, double directrix);
-
-
-/*
- Find intersection points of two parabolas with foci `f1` and `f2` and with given `directrix`
- */
 std::vector<Point2D> findIntersectionPoints(const Point2D &f1, const Point2D &f2, double directrix);
 
 
@@ -180,8 +169,6 @@ Definition headers for Beachline
 
 
 class Event;
-
-
 namespace beachline {
     
     using namespace DCEL;
@@ -191,27 +178,19 @@ namespace beachline {
 
     class BLNode {
     public:
-        
-        // Height of the tree
+    
         int height;
-        
-        // Pointer to a position of a sweepline
         double *sweepline;
         
-        // Pointer to a vector of input points
         const std::vector<Point2D> *points;
         
-        // Indices of the points
         std::pair<int, int> indices;
         
-        // Pointers to left, right children and parent node
         BLNodePtr left, right, parent;
         
-        // Pointer to a circle event for a leaf node or halfedge for an internal node
         std::shared_ptr<Event> circle_event;
         std::shared_ptr<HalfEdge> edge;
         
-        // Constructor
         BLNode(const std::pair<int,int>& _indices,
                double* _sweepline = nullptr,
                const std::vector<Point2D>* _points = nullptr,
@@ -220,89 +199,58 @@ namespace beachline {
                BLNodePtr _parent = nullptr,
                int _height = 1);
         
-        // Pointers to a next and previous arc-nodes
         BLNodePtr next, prev;
         
-        // Leaf is defined as <p_i,p_i>
         inline bool is_leaf() {
             return indices.first == indices.second;
         }
         
-        // Returns id of the node (only for leafs)
         inline int get_id() {
             return indices.first;
         }
         
-        // Check if indices are equal
         inline bool has_indices(int a, int b) {
             return indices.first == a && indices.second == b;
         }
-        
-        // Check if indices are equal
+
         inline bool has_indices(const std::pair<int,int> &p) {
             return indices.first == p.first && indices.second == p.second;
         }
-        
-        // Return x-coordinate of:
-        //  - in case of leaf node - corresponding focus of parabola;
-        //  - in case of internal node - breakpoint;
-        double value();
-        
+
+        double value();        
     };
-    
-    
-    /**
-     Connect as a list
-     */
+
     void connect(BLNodePtr prev, BLNodePtr next);
-
-
-    /**
-     Check if the node is a root node
-     */
     bool is_root(BLNodePtr node);
-
-
-    /**
-     Get height of the node
-     */
     int get_height(BLNodePtr node);
-
-
-    /**
-     Update height of the node
-     */
     void update_height(BLNodePtr node);
-
-
-    /**
+    /*
      Get balance of the node (difference between the height of left and right subtrees)
      */
     int get_balance(BLNodePtr node);
-
-    /**
+    /*
      Performs rotation of a tree around `node` such that it goes to the left subtree
      */
     BLNodePtr rotate_left(BLNodePtr node);
 
-    /**
+    /*
      Performs rotation of a tree around `node` such that it goes to the right subtree
      */
     BLNodePtr rotate_right(BLNodePtr node);
 
-    /**
+    /*
      Find a leaf in a tree such that x is under the parabolic arc,
      which corresponds to this leaf.
      */
     BLNodePtr find(BLNodePtr root, double x);
 
-    /**
+    /*
      Replace a leaf `node` with a new subtree, which has root `new_node`.
      The function rebalances the tree and returns the pointer to a new root node.
      */
     BLNodePtr replace(BLNodePtr node, BLNodePtr new_node);
     
-    /**
+    /*
      Remove a disappearing arc related to a circle event.
      The function rebalances the tree and returns the pointer to a new root node.
      */
@@ -331,6 +279,4 @@ void build_voronoi(const std::vector<Point2D> &points,
                    std::vector<bl::HalfEdgePtr> &halfedges,
                    std::vector<bl::VertexPtr> &vertices,
                    std::vector<bl::HalfEdgePtr> &faces);
-
-
 #endif

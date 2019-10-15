@@ -7,44 +7,14 @@
 #include <queue>
 #include <algorithm>
 #include "VoronoiDiagram.hpp"
+
 #define MAX 500
+
 double x_max=0,y_max=0;
 double x_min=0,y_min=0;
 namespace bl = beachline;
 
-void plot_circle(const Point2D &c, double r, std::ofstream & fout , double shift_x, double shift_y) {
-
-    fout<<"<circle cx=\""<<c.x+shift_x<<"\" "<<"cy=\""<<c.y+shift_y<<"\" "<<"r=\""<<r<<"\" stroke=\"#0066ff\" stroke-width=\"0\" fill=\"#0066ff\" fill-opacity=\"0.4\" />\n";   
-}
-
-void plot_point(const Point2D &c, std::ofstream & fout , double shift_x, double shift_y){
-        
- fout<<"<circle cx=\""<<c.x+shift_x<<"\" "<<"cy=\""<<c.y+shift_y<<"\" "<<"r=\""<<2<<"\" stroke=\"black\" stroke-width=\"0\" fill=\"#000000\" />\n";
-}
-
-
-double random_number() {
-    return (double(rand())*MAX)/ double(RAND_MAX);
-}
-
-// random number generator that takes current second as the seed
-std::vector<Point2D> randomPoint(int number) {
-    srand(static_cast<unsigned int>(time(0)));
-    std::vector<Point2D> points;
-    for (int i = 0; i < number; ++i) {
-        double x = random_number(), y = random_number();
-        int id=i+1;
-        Point2D p;
-        p.x=x;
-        p.y=y;
-        p.id=id;
-        points.push_back(p);
-    }
-    return points;
-}
-
-
-void initEdgePointsVis(bl::HalfEdgePtr h, std::vector<double> &x, std::vector<double> &y,
+void InitiateEdgeVisPoints(bl::HalfEdgePtr h, std::vector<double> &x, std::vector<double> &y,
                        const std::vector<Point2D> &points) { 
     
     if (h->vertex != nullptr && h->twin->vertex != nullptr) {
@@ -141,6 +111,35 @@ void initEdgePointsVis(bl::HalfEdgePtr h, std::vector<double> &x, std::vector<do
     }
 }
 
+void draw_circle(const Point2D &c, double r, std::ofstream & fout , double shift_x, double shift_y) {
+
+    fout<<"<circle cx=\""<<c.x+shift_x<<"\" "<<"cy=\""<<c.y+shift_y<<"\" "<<"r=\""<<r<<"\" stroke=\"#0066ff\" stroke-width=\"0\" fill=\"#0066ff\" fill-opacity=\"0.4\" />\n";   
+}
+
+
+// random number generator that takes current second as the seed
+std::vector<Point2D> randomPoint(int number) {
+    srand(static_cast<unsigned int>(time(0)));
+    std::vector<Point2D> points;
+    for (int i = 0; i < number; ++i) {
+        double x = (double(rand())*MAX)/ double(RAND_MAX);
+        double y = (double(rand())*MAX)/ double(RAND_MAX);
+        int id=i+1;
+        Point2D p;
+        p.x=x;
+        p.y=y;
+        p.id=id;
+        points.push_back(p);
+    }
+    return points;
+}
+
+
+void pin_point(const Point2D &c, std::ofstream & fout , double shift_x, double shift_y){
+        
+ fout<<"<circle cx=\""<<c.x+shift_x<<"\" "<<"cy=\""<<c.y+shift_y<<"\" "<<"r=\""<<2<<"\" stroke=\"black\" stroke-width=\"0\" fill=\"#000000\" />\n";
+}
+
 
 int main(int argc, const char *argv[]) {
     
@@ -166,7 +165,7 @@ int main(int argc, const char *argv[]) {
      {   for (size_t i = 0; i < halfedges.size(); ++i) {
         bl::HalfEdgePtr h = halfedges[i];
        std::vector<double> x(2, 0.0), y(2, 0.0);
-       initEdgePointsVis(h, x, y, points);
+       InitiateEdgeVisPoints(h, x, y, points);
     }
     
   double X_MIN=x_min;
@@ -177,13 +176,13 @@ int main(int argc, const char *argv[]) {
   double shift_y=Y_MAX-Y_MIN;
    fout<<"<svg xmlns=\"http://www.w3.org/2000/svg\">\n<rect width=\""<<2*shift_x+100<<"\" height=\""<<2*shift_y+100<<"\" style=\"fill:rgb(255,255,255); stroke-width:0; stroke:rgb(0,0,0)\" />\n";
    for(size_t i = 0; i < points.size(); ++i){
-     plot_point(points[i],fout,shift_x,shift_y);
+     pin_point(points[i],fout,shift_x,shift_y);
     }
     
       for (size_t i = 0; i < halfedges.size(); ++i) {
         bl::HalfEdgePtr h = halfedges[i];
        std::vector<double> x(2, 0.0), y(2, 0.0);
-       initEdgePointsVis(h, x, y, points);
+       InitiateEdgeVisPoints(h, x, y, points);
        fout<<"<line x1=\""<<x[0]+shift_x<<"\" y1=\""<<y[0]+shift_y<<"\" x2=\""<<x[1]+shift_x<<"\" y2=\""<<y[1]+shift_y<<"\" style=\"stroke:rgb(255,0,0);stroke-width:1\" />\n";
     } 
       //draw circles manually
@@ -191,8 +190,8 @@ int main(int argc, const char *argv[]) {
       double dist2;
       Point2D diff = points[0]-points[1];
       dist2= diff.norm();
-      plot_circle(points[0],dist2/2.0,fout,shift_x,shift_y);
-      plot_circle(points[1],dist2/2.0,fout,shift_x,shift_y);
+      draw_circle(points[0],dist2/2.0,fout,shift_x,shift_y);
+      draw_circle(points[1],dist2/2.0,fout,shift_x,shift_y);
       fout<<"</svg>\n"; 
     
      }
@@ -201,7 +200,7 @@ int main(int argc, const char *argv[]) {
    for (size_t i = 0; i < halfedges.size(); ++i) {
         bl::HalfEdgePtr h = halfedges[i];
        std::vector<double> x(2, 0.0), y(2, 0.0);
-       initEdgePointsVis(h, x, y, points);
+       InitiateEdgeVisPoints(h, x, y, points);
     }
     
   double X_MIN=x_min;
@@ -212,13 +211,13 @@ int main(int argc, const char *argv[]) {
   double shift_y=Y_MAX-Y_MIN; 
    fout<<"<svg xmlns=\"http://www.w3.org/2000/svg\">\n<rect width=\""<<2*shift_x+100<<"\" height=\""<<2*shift_y+100<<"\" style=\"fill:rgb(255,255,255); stroke-width:0; stroke:rgb(0,0,0)\" />\n";
    for(size_t i = 0; i < points.size(); ++i){
-     plot_point(points[i],fout,shift_x,shift_y);
+     pin_point(points[i],fout,shift_x,shift_y);
     }
     
       for (size_t i = 0; i < halfedges.size(); ++i) {
         bl::HalfEdgePtr h = halfedges[i];
        std::vector<double> x(2, 0.0), y(2, 0.0);
-       initEdgePointsVis(h, x, y, points);
+       InitiateEdgeVisPoints(h, x, y, points);
        fout<<"<line x1=\""<<x[0]+shift_x<<"\" y1=\""<<y[0]+shift_y<<"\" x2=\""<<x[1]+shift_x<<"\" y2=\""<<y[1]+shift_y<<"\" style=\"stroke:rgb(255,0,0);stroke-width:1\" />\n";
     } 
     
@@ -253,7 +252,7 @@ int main(int argc, const char *argv[]) {
             if(mindistance>distance||mindistance==-1)
              {mindistance = distance;}
              
-      plot_circle(site,mindistance/2.0,fout,shift_x,shift_y);
+      draw_circle(site,mindistance/2.0,fout,shift_x,shift_y);
     
     
     }

@@ -6,9 +6,7 @@
 #include <vector>
 #include <queue>
 #include <algorithm>
-#include "Point2D.h"
 #include "VoronoiDiagram.hpp"
-#include "Beachline.hpp"
 #define MAX 500
 double x_max=0,y_max=0;
 double x_min=0,y_min=0;

@@ -1,5 +1,5 @@
 a.out: main.o Point2D.o VoronoiDiagram.o Beachline.o
-	g++ main.o Point2D.o VoronoiDiagram.o Beachline.o Circle.o Parabola.o DCEL.o
+	g++ main.o VoronoiDiagram.o
 main.o: main.cpp Point2D.o VoronoiDiagram.o Beachline.o
 	g++ -c main.cpp
 Point2D.o: Point2D.cpp Point2D.h

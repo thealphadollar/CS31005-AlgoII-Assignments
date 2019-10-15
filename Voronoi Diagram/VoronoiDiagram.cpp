@@ -1,7 +1,6 @@
 
 #include "VoronoiDiagram.hpp"
 #include <cmath>
-
 #include <queue>
 
 #define BREAKPOINTS_EPSILON 1.0e-5
@@ -14,6 +13,13 @@
 #endif
 
 using namespace std;
+
+/* =================================
+
+Function definitions for 2D Points
+
+================================= */
+
 
 const double Point2D::Inf = std::numeric_limits<double>::infinity();
 
@@ -172,9 +178,11 @@ bool equal(double v1, double v2, double EPSILON) {
 }
 
 
+/* =================================
 
+Function definitions for Circle
 
-// Circle
+================================= */
 
 
 bool findCircleCenter(const Point2D &p1, const Point2D &p2, const Point2D &p3, Point2D &center) {
@@ -203,34 +211,24 @@ bool findCircleCenter(const Point2D &p1, const Point2D &p2, const Point2D &p3, P
 }
 
 
+/* =================================
 
+Function definitions for DCEL
 
-
-
-
-
-// DCEL
+================================= */
 
 namespace DCEL {
     
    
     Vertex::Vertex(const Point2D &pos, HalfEdgePtr incident_edge) : point(pos), edge(incident_edge)  { }
-    
-    
     HalfEdge::HalfEdge(int _l_index, int _r_index, VertexPtr _vertex) :
         l_index(_l_index), r_index(_r_index), vertex(_vertex) {}
-    
-    
     HalfEdgePtr HalfEdge::vertexNextCCW() {
         return twin->prev;
     }
-    
-    
     HalfEdgePtr HalfEdge::vertexNextCW() {
         return next->twin;
     }
-    
-    
     std::pair<HalfEdgePtr, HalfEdgePtr> make_twins(int left_index, int right_index) {
         
         HalfEdgePtr h = std::make_shared<HalfEdge>(left_index, right_index);
@@ -241,32 +239,24 @@ namespace DCEL {
         
         return std::make_pair(h, h_twin);
     }
-    
-    
     std::pair<HalfEdgePtr, HalfEdgePtr> make_twins(const std::pair<int,int> &indices) {
         
         return make_twins(indices.first, indices.second);
     }
-    
-    
     void connect_halfedges(HalfEdgePtr p1, HalfEdgePtr p2) {
         p1->next = p2;
         p2->prev = p1;
     }
-    
 }
 
 
 
-// Parabola
+/* =================================
 
+Function definitions for Parabola
 
+================================= */
 
-/**
- 
- Calculate number of intersection points between two parabolas with foci `f1` and `f2` and with given `directrix`
- 
- */
 int intersectionPointsNum(const Point2D &f1, const Point2D &f2, double directrix) {
     if (fabs(f1.x - f2.x) < POINT_EPSILON && fabs(f1.y - f2.y) < POINT_EPSILON) {
         return -1;
@@ -276,13 +266,6 @@ int intersectionPointsNum(const Point2D &f1, const Point2D &f2, double directrix
     return 2;
 }
 
-
-/**
- 
- Find intersection points of two parabolas with foci `f1` and `f2` and with directrix given `d`
- Returns  intersection points ordered by x-coordinate
- 
- */
 std::vector<Point2D> findIntersectionPoints(const Point2D &f1, const Point2D &f2, double d) {
     std::vector<Point2D> result;
     if (fabs(f1.x - f2.x) < POINT_EPSILON) {
@@ -313,17 +296,15 @@ std::vector<Point2D> findIntersectionPoints(const Point2D &f1, const Point2D &f2
 }
 
 
+/* =================================
 
+Function definitions for Beachline
 
-
+================================= */
 
 namespace bl = beachline;
-
-
-
 namespace beachline {
 
-    
     BLNode::BLNode(const std::pair<int,int>& _indices,
                    double* _sweepline ,
                    const std::vector<Point2D>* _points,
@@ -334,7 +315,6 @@ namespace beachline {
                                   parent(_parent), height(_height),
                                   sweepline(_sweepline), points(_points),
                                   next(nullptr), prev(nullptr) {}
-
 
     double BLNode::value() {
         if (points == nullptr)
@@ -364,16 +344,12 @@ namespace beachline {
         prev->next = next;
         next->prev = prev;
     }
-
-
     /**
      Check if the node is a root node
      */
     bool is_root(BLNodePtr node) {
         return node->parent == nullptr;
     }
-
-
     /**
      Get height of the node
      */
@@ -381,8 +357,6 @@ namespace beachline {
         if (node == nullptr) return 0;
         return node->height;
     }
-
-
     /**
      Update height of the node
      */
@@ -391,15 +365,12 @@ namespace beachline {
             return;
         node->height = std::max(get_height(node->left), get_height(node->right)) + 1;
     }
-
-
     /**
      Get balance of the node (difference between the height of left and right subtrees)
      */
     int get_balance(BLNodePtr node) {
         return get_height(node->left) - get_height(node->right);
     }
-
 
     BLNodePtr rotate_left(BLNodePtr node) {
         
@@ -439,8 +410,6 @@ namespace beachline {
         
         return rnode;
     }
-
-
     /**
      Performs rotation of a tree around `node` such that it goes to the right subtree
      */
@@ -482,7 +451,6 @@ namespace beachline {
         
         return lnode;
     }
-
 
     BLNodePtr find(BLNodePtr root, double x) {
         if (root == nullptr) {
@@ -621,7 +589,6 @@ namespace beachline {
         return new_root;
     }
 
-
     std::pair<BLNodePtr, BLNodePtr> breakpoints(BLNodePtr leaf) {
         
         if (leaf == nullptr || leaf->next == nullptr || leaf->prev == nullptr)
@@ -657,7 +624,6 @@ namespace beachline {
         }
 
     }
-
 
     BLNodePtr make_subtree(int index, int index_behind, double *sweepline,
                            const std::vector<Point2D> *points,
@@ -705,7 +671,6 @@ namespace beachline {
         return node1;
     }
 
-
     BLNodePtr make_simple_subtree(int index, int index_behind, double *sweepline,
                                   const std::vector<Point2D> *points,
                                   std::vector<HalfEdgePtr> &edges) {
@@ -741,7 +706,6 @@ namespace beachline {
         
         return node;
     }
-
 
     bool _validate(BLNodePtr node) {
         
@@ -812,33 +776,32 @@ namespace beachline {
 }
 
 struct Event {
-    
     enum { SITE = 0, CIRCLE = 1, SKIP = 2, };
-    
-    
     int type;
     Point2D point;
-    
     /*
      Site event attributes:
      */
     int index;
-    
     /*
      Circle event attributes:
      */
     Point2D center;
     bl::BLNodePtr arc;
-    
-    
     Event(int _index = -1, int _type = Event::SKIP, const Point2D &_point = Point2D(0.0, 0.0)) :
     index(_index), type(_type), point(_point), arc(nullptr) {}
     
 };
 
 
-typedef std::shared_ptr<Event> EventPtr;
+/* =================================
 
+Function definitions for Voronoi Combined with above definitions
+
+================================= */
+
+
+typedef std::shared_ptr<Event> EventPtr;
 
 struct Point2DComparator {
     bool operator()(const Point2D &p1, const Point2D &p2) {
@@ -846,13 +809,11 @@ struct Point2DComparator {
     }
 };
 
-
 struct Point2DComparator2 {
     bool operator()(const Point2D &p1, const Point2D &p2) {
         return (p1.y == p2.y && p1.x < p2.x) || p1.y < p2.y;
     }
 };
-
 
 struct EventPtrComparator {
     Point2DComparator point_cmp;
@@ -860,7 +821,6 @@ struct EventPtrComparator {
         return point_cmp(e1->point, e2->point);
     }
 };
-
 
 EventPtr checkCircleEvent(bl::BLNodePtr n1, bl::BLNodePtr n2, bl::BLNodePtr n3,const std::vector<Point2D> &points, double sweepline) {
     
@@ -895,7 +855,6 @@ EventPtr checkCircleEvent(bl::BLNodePtr n1, bl::BLNodePtr n2, bl::BLNodePtr n3,c
     
     return nullptr;
 }
-
 
 void build_voronoi(const std::vector<Point2D> &points,
                    std::vector<bl::HalfEdgePtr> &halfedges,

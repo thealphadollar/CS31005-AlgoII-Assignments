@@ -1,15 +1,26 @@
 #include<iostream>
 #include<memory>
+#include <vector>
+#include <limits>
+#include <cmath>
+#include <time.h>
+#include <iomanip>
+#include <random>
+#include <cassert>
+
+
 #ifndef VoronoiDiagram_hpp
 #define VoronoiDiagram_hpp
 
 
-#include <iostream>
-#include <vector>
-#include <limits>
-#include <cmath>
-
 #define POINT_EPSILON 1.0e-6
+
+
+/* =================================
+
+Definition headers for 2D Points
+
+================================= */
 
 class Point2D {
 
@@ -77,43 +88,30 @@ double crossProduct(const Point2D &p1, const Point2D &p2);
 bool equal(const Point2D &p1, const Point2D &p2, double EPSILON = POINT_EPSILON);
 bool equal(double v1, double v2, double EPSILON = POINT_EPSILON);
 
-// PARABOLA
+/* =================================
 
+Definition headers for Parabola
 
-/**
- 
+================================= */
+
+/*
  Calculate number of intersection points between two parabolas with foci `f1` and `f2` and with given `directrix`
- 
  */
 int intersectionPointsNum(const Point2D &f1, const Point2D &f2, double directrix);
 
 
-/**
-
+/*
  Find intersection points of two parabolas with foci `f1` and `f2` and with given `directrix`
- 
  */
 std::vector<Point2D> findIntersectionPoints(const Point2D &f1, const Point2D &f2, double directrix);
 
 
+/* =================================
 
+Definition headers for DCEL
 
+================================= */
 
-
-
-#include <time.h>
-#include <iostream>
-#include<memory>
-#include <limits>
-#include <iomanip>
-#include <vector>
-#include <random>
-#include <cassert>
-
-
-
-
-// DCEL
 
 namespace DCEL {
 
@@ -173,6 +171,12 @@ namespace DCEL {
 }
 
 
+
+/* =================================
+
+Definition headers for Beachline
+
+================================= */
 
 
 class Event;
@@ -276,25 +280,21 @@ namespace beachline {
      */
     int get_balance(BLNodePtr node);
 
-
     /**
      Performs rotation of a tree around `node` such that it goes to the left subtree
      */
     BLNodePtr rotate_left(BLNodePtr node);
-
 
     /**
      Performs rotation of a tree around `node` such that it goes to the right subtree
      */
     BLNodePtr rotate_right(BLNodePtr node);
 
-
     /**
      Find a leaf in a tree such that x is under the parabolic arc,
      which corresponds to this leaf.
      */
     BLNodePtr find(BLNodePtr root, double x);
-    
 
     /**
      Replace a leaf `node` with a new subtree, which has root `new_node`.
@@ -302,17 +302,12 @@ namespace beachline {
      */
     BLNodePtr replace(BLNodePtr node, BLNodePtr new_node);
     
-    
     /**
      Remove a disappearing arc related to a circle event.
      The function rebalances the tree and returns the pointer to a new root node.
      */
     BLNodePtr remove(BLNodePtr leaf);;
     
-    
-    /**
-     Returns breakpoints for a given arc
-     */
     std::pair<BLNodePtr, BLNodePtr> breakpoints(BLNodePtr leaf);
     
     
@@ -325,30 +320,17 @@ namespace beachline {
                                   const std::vector<Point2D> *points,
                                   std::vector<HalfEdgePtr> &edges);
     
-    
     bool _validate(BLNodePtr node);
-    
-    
     bool _check_balance(BLNodePtr node);
 
-
-    /**
-     Print tree
-     */
-    void print_tree(BLNodePtr root, int width = 7);
-    
+    void print_tree(BLNodePtr root, int width = 7);   
 }
 
-
 namespace bl = beachline;
-
-
 void build_voronoi(const std::vector<Point2D> &points,
                    std::vector<bl::HalfEdgePtr> &halfedges,
                    std::vector<bl::VertexPtr> &vertices,
                    std::vector<bl::HalfEdgePtr> &faces);
 
-//std::vector<bl::HalfEdgePtr> init
-//
 
-#endif /* VoronoiDiagram_hpp */
+#endif

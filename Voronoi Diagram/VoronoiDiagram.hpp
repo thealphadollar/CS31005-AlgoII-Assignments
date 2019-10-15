@@ -1,3 +1,11 @@
+/*
+Assignment 4: Voronoi Diagrams
+Shivam Kumar Jha
+17CS30033
+
+Voronoi DataStructure Header File
+*/
+
 #include <iostream>
 #include <memory>
 #include <vector>

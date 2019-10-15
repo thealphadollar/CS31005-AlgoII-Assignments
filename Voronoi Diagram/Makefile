@@ -1,3 +1,8 @@
+# Assignment 4: Voronoi Diagrams
+# Shivam Kumar Jha
+# 17CS30033
+# Makefile for easy compilation
+
 a.out: main.o VoronoiDiagram.o
 	g++ main.o VoronoiDiagram.o
 main.o: main.cpp VoronoiDiagram.o
